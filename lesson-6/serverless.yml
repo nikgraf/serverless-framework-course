@@ -1,0 +1,37 @@
+service: my-app
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:PutItem
+      # Resource: "arn:aws:dynamodb:*:*:table/todos"
+      Resource: "arn:aws:dynamodb:us-east-1:853182604221:table/todos"
+
+functions:
+  createTodo:
+    handler: create.run
+    events:
+      - http:
+          path: todos
+          method: post
+
+resources:
+  Resources:
+    TodosDynamoDbTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: id
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: todos

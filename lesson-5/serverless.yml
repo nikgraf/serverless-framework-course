@@ -1,0 +1,31 @@
+service: my-app
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+
+functions:
+  helloWorld:
+    handler: handler.run
+    events:
+      - http:
+          path: /
+          method: get
+
+resources:
+  Resources:
+    TodosDynamoDbTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        TableName: todos
+        AttributeDefinitions:
+          -
+            AttributeName: id
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1

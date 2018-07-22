@@ -1,0 +1,9 @@
+service: my-app
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+
+functions:
+  helloWorld:
+    handler: handler.run
